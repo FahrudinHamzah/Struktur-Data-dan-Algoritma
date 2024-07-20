@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Struktur Pelanggan
+struct Pelanggan {
+    char nama[50];
+    int id;
+};
+
+// Struktur Menu
+struct Menu {
+    char nama[50];
+    float harga;
+};
+
+// Struktur Pesanan
+struct Pesanan {
+    struct Pelanggan *pelanggan;
+    struct Menu *item;
+    int jumlah;
+    float total;
+};
+
+// Fungsi untuk membuat pelanggan baru
+struct Pelanggan* buatPelanggan(char *nama, int id) {
+    struct Pelanggan *p = (struct Pelanggan*) malloc(sizeof(struct Pelanggan));
+    strcpy(p->nama, nama);
+    p->id = id;
+    return p;
+}
+
+// Fungsi untuk membuat menu baru
+struct Menu* buatMenu(char *nama, float harga) {
+    struct Menu *m = (struct Menu*) malloc(sizeof(struct Menu));
+    strcpy(m->nama, nama);
+    m->harga = harga;
+    return m;
+}
+
+// Fungsi untuk membuat pesanan baru
+struct Pesanan* buatPesanan(struct Pelanggan *pelanggan, struct Menu *item, int jumlah) {
+    struct Pesanan *p = (struct Pesanan*) malloc(sizeof(struct Pesanan));
+    p->pelanggan = pelanggan;
+    p->item = item;
+    p->jumlah = jumlah;
+    p->total = item->harga * jumlah;
+    return p;
+}
+
+// Fungsi untuk mencetak pesanan
+void cetakPesanan(struct Pesanan *pesanan) {
+    printf("Pesanan untuk %s (ID: %d)\n", pesanan->pelanggan->nama, pesanan->pelanggan->id);
+    printf("Item: %s\n", pesanan->item->nama);
+    printf("Jumlah: %d\n", pesanan->jumlah);
+    printf("Total: %.2f\n", pesanan->total);
+}
+
+int main() {
+    // Membuat beberapa pelanggan
+    struct Pelanggan *pelanggan1 = buatPelanggan("Budi", 1);
+    struct Pelanggan *pelanggan2 = buatPelanggan("Andi", 2);
+
+    // Membuat beberapa item menu
+    struct Menu *kopi = buatMenu("Kopi", 15000.0);
+    struct Menu *teh = buatMenu("Teh", 10000.0);
+
+    // Membuat beberapa pesanan
+    struct Pesanan *pesanan1 = buatPesanan(pelanggan1, kopi, 2);
+    struct Pesanan *pesanan2 = buatPesanan(pelanggan2, teh, 3);
+
+    // Mencetak pesanan
+    cetakPesanan(pesanan1);
+    cetakPesanan(pesanan2);
+
+    // Dealokasi memori
+    free(pelanggan1);
+    free(pelanggan2);
+    free(kopi);
+    free(teh);
+    free(pesanan1);
+    free(pesanan2);
+
+    return 0;
+}
